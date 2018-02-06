@@ -5,6 +5,7 @@ import com.masvis.springinternalutils.backrelations.annotations.HandledBackrelat
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.StandardAnnotationMetadata;
@@ -13,10 +14,9 @@ import org.springframework.util.MultiValueMap;
 
 import javax.persistence.Entity;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 
+@Configuration
 public class HandledBackrelationBeansRegistrar implements ImportBeanDefinitionRegistrar {
-
     private ClassPathScanner classpathScanner;
 
     public HandledBackrelationBeansRegistrar() {
@@ -52,22 +52,20 @@ public class HandledBackrelationBeansRegistrar implements ImportBeanDefinitionRe
         try {
             for (BeanDefinition beanDefinition : classpathScanner.findCandidateComponents(basePackage)) {
                 Class<?> clazz = Class.forName(beanDefinition.getBeanClassName());
-                ArrayList<Field> fields = new ArrayList<>();
                 for (Field field : clazz.getDeclaredFields()) {
-                    if (field.isAnnotationPresent(HandledBackrelation.class))
-                        fields.add(field);
+                    if (field.isAnnotationPresent(HandledBackrelation.class)) {
+                        HandledBackrelation handledBackrelation = field.getAnnotation(HandledBackrelation.class);
+                        BeanDefinition definition = BeanDefinitionBuilder
+                                .genericBeanDefinition(BackrelationsEventHandler.class)
+                                .addConstructorArgValue(clazz)
+                                .addConstructorArgValue(field)
+                                .addConstructorArgValue(applicationContext.getBean(handledBackrelation.value()))
+                                .setScope(BeanDefinition.SCOPE_SINGLETON)
+                                .getBeanDefinition();
+
+                        registry.registerBeanDefinition(clazz.getSimpleName() + "BackrelationsEventHandler", definition);
+                    }
                 }
-                if (fields.size() == 0)
-                    continue;
-
-                BeanDefinition definition = BeanDefinitionBuilder
-                        .genericBeanDefinition(BackrelationsEventHandler.class)
-                        .addConstructorArgValue(clazz)
-                        .addConstructorArgValue(fields)
-                        .setScope(BeanDefinition.SCOPE_SINGLETON)
-                        .getBeanDefinition();
-
-                registry.registerBeanDefinition(clazz.getSimpleName() + "BackrelationsEventHandler", definition);
             }
         } catch (Exception e) {
             System.out.println("Exception while createing proxy");

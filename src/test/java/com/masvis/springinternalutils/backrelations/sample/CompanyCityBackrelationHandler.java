@@ -5,8 +5,6 @@ import com.masvis.springinternalutils.backrelations.sample.domain.City;
 import com.masvis.springinternalutils.backrelations.sample.domain.Company;
 import com.masvis.springinternalutils.backrelations.sample.service.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;

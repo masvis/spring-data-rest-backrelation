@@ -5,7 +5,6 @@ import com.masvis.springinternalutils.backrelations.annotations.HandledBackrelat
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.StandardAnnotationMetadata;
@@ -15,7 +14,6 @@ import org.springframework.util.MultiValueMap;
 import javax.persistence.Entity;
 import java.lang.reflect.Field;
 
-@Configuration
 public class HandledBackrelationBeansRegistrar implements ImportBeanDefinitionRegistrar {
     private ClassPathScanner classpathScanner;
 
@@ -59,7 +57,7 @@ public class HandledBackrelationBeansRegistrar implements ImportBeanDefinitionRe
                                 .genericBeanDefinition(BackrelationsEventHandler.class)
                                 .addConstructorArgValue(clazz)
                                 .addConstructorArgValue(field)
-                                .addConstructorArgValue(applicationContext.getBean(handledBackrelation.value()))
+                                .addConstructorArgValue(handledBackrelation.value())
                                 .setScope(BeanDefinition.SCOPE_SINGLETON)
                                 .getBeanDefinition();
 

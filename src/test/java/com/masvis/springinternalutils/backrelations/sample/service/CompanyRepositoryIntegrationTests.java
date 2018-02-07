@@ -45,8 +45,11 @@ public class CompanyRepositoryIntegrationTests {
 
     @Test
     public void test1FillRest() {
-        HttpEntity<String> tHttpEntity;
+        HttpEntity<String> entity;
         ResponseEntity<String> body;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(valueOf("text/uri-list"));
 
         City bari = new City();
         bari.setName("Bari");
@@ -82,42 +85,39 @@ public class CompanyRepositoryIntegrationTests {
         masvis = this.restTemplate.postForObject("/companies", masvis, Company.class);
         university = this.restTemplate.postForObject("/companies", university, Company.class);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(valueOf("text/uri-list"));
-
-        tHttpEntity = new HttpEntity<>("/cities/" + bari.getId(), headers);
-        body = this.restTemplate.exchange("/companies/" + politecnico.getId() + "/cities", HttpMethod.POST, tHttpEntity, String.class);
+        entity = new HttpEntity<>("/cities/" + bari.getId(), headers);
+        body = this.restTemplate.exchange("/companies/" + politecnico.getId() + "/cities", HttpMethod.POST, entity, String.class);
         assertThat(body.getStatusCode() == HttpStatus.CREATED);
 
-        tHttpEntity = new HttpEntity<>("/cities/" + conversano.getId(), headers);
-        body = this.restTemplate.exchange("/companies/" + politecnico.getId() + "/cities", HttpMethod.POST, tHttpEntity, String.class);
+        entity = new HttpEntity<>("/cities/" + conversano.getId(), headers);
+        body = this.restTemplate.exchange("/companies/" + politecnico.getId() + "/cities", HttpMethod.POST, entity, String.class);
         assertThat(body.getStatusCode() == HttpStatus.CREATED);
-        tHttpEntity = new HttpEntity<>("/cities/" + conversano.getId(), headers);
-        body = this.restTemplate.exchange("/companies/" + masvis.getId() + "/cities", HttpMethod.POST, tHttpEntity, String.class);
-        assertThat(body.getStatusCode() == HttpStatus.CREATED);
-
-        tHttpEntity = new HttpEntity<>("/cities/" + brindisi.getId(), headers);
-        body = this.restTemplate.exchange("/companies/" + politecnico.getId() + "/cities", HttpMethod.POST, tHttpEntity, String.class);
-        assertThat(body.getStatusCode() == HttpStatus.CREATED);
-        tHttpEntity = new HttpEntity<>("/cities/" + lecce.getId(), headers);
-        body = this.restTemplate.exchange("/companies/" + politecnico.getId() + "/cities", HttpMethod.POST, tHttpEntity, String.class);
-        assertThat(body.getStatusCode() == HttpStatus.CREATED);
-        tHttpEntity = new HttpEntity<>("/cities/" + cassano.getId(), headers);
-        body = this.restTemplate.exchange("/companies/" + masvis.getId() + "/cities", HttpMethod.POST, tHttpEntity, String.class);
-        assertThat(body.getStatusCode() == HttpStatus.CREATED);
-        tHttpEntity = new HttpEntity<>("/cities/" + gioia.getId(), headers);
-        body = this.restTemplate.exchange("/companies/" + masvis.getId() + "/cities", HttpMethod.POST, tHttpEntity, String.class);
+        entity = new HttpEntity<>("/cities/" + conversano.getId(), headers);
+        body = this.restTemplate.exchange("/companies/" + masvis.getId() + "/cities", HttpMethod.POST, entity, String.class);
         assertThat(body.getStatusCode() == HttpStatus.CREATED);
 
-        tHttpEntity = new HttpEntity<>("/cities/" + rutigliano.getId(), headers);
-        body = this.restTemplate.exchange("/companies/" + university.getId() + "/cities", HttpMethod.PUT, tHttpEntity, String.class);
+        entity = new HttpEntity<>("/cities/" + brindisi.getId(), headers);
+        body = this.restTemplate.exchange("/companies/" + politecnico.getId() + "/cities", HttpMethod.POST, entity, String.class);
         assertThat(body.getStatusCode() == HttpStatus.CREATED);
-        tHttpEntity = new HttpEntity<>("/cities/" + brindisi.getId(), headers);
-        body = this.restTemplate.exchange("/companies/" + university.getId() + "/cities", HttpMethod.PUT, tHttpEntity, String.class);
+        entity = new HttpEntity<>("/cities/" + lecce.getId(), headers);
+        body = this.restTemplate.exchange("/companies/" + politecnico.getId() + "/cities", HttpMethod.POST, entity, String.class);
+        assertThat(body.getStatusCode() == HttpStatus.CREATED);
+        entity = new HttpEntity<>("/cities/" + cassano.getId(), headers);
+        body = this.restTemplate.exchange("/companies/" + masvis.getId() + "/cities", HttpMethod.POST, entity, String.class);
+        assertThat(body.getStatusCode() == HttpStatus.CREATED);
+        entity = new HttpEntity<>("/cities/" + gioia.getId(), headers);
+        body = this.restTemplate.exchange("/companies/" + masvis.getId() + "/cities", HttpMethod.POST, entity, String.class);
         assertThat(body.getStatusCode() == HttpStatus.CREATED);
 
-        tHttpEntity = new HttpEntity<>(null, headers);
-        body = this.restTemplate.exchange("/companies/" + masvis.getId() + "/cities/" + masvis.getId(), HttpMethod.DELETE, tHttpEntity, String.class);
+        entity = new HttpEntity<>("/cities/" + rutigliano.getId(), headers);
+        body = this.restTemplate.exchange("/companies/" + university.getId() + "/cities", HttpMethod.PUT, entity, String.class);
+        assertThat(body.getStatusCode() == HttpStatus.CREATED);
+        entity = new HttpEntity<>("/cities/" + brindisi.getId(), headers);
+        body = this.restTemplate.exchange("/companies/" + university.getId() + "/cities", HttpMethod.PUT, entity, String.class);
+        assertThat(body.getStatusCode() == HttpStatus.CREATED);
+
+        entity = new HttpEntity<>(null, headers);
+        body = this.restTemplate.exchange("/companies/" + masvis.getId() + "/cities/" + gioia.getId(), HttpMethod.DELETE, entity, String.class);
         assertThat(body.getStatusCode() == HttpStatus.ACCEPTED);
     }
 
@@ -165,7 +165,7 @@ public class CompanyRepositoryIntegrationTests {
 
         List<Company> companiesInBrindisi = this.companyRepository.findByCitiesContaining(brindisi);
 
-        assertThat(companiesInBrindisi).hasSize(1);
+        assertThat(companiesInBrindisi).hasSize(2);
     }
 
     @Test

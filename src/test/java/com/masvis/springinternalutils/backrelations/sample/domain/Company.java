@@ -16,8 +16,8 @@
 
 package com.masvis.springinternalutils.backrelations.sample.domain;
 
-import com.masvis.springinternalutils.backrelations.sample.CompanyCityBackrelationHandler;
 import com.masvis.springinternalutils.backrelations.annotations.HandledBackrelation;
+import com.masvis.springinternalutils.backrelations.sample.CompanyCityBackrelationHandler;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

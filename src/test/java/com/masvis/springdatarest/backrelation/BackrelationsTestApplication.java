@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-package com.masvis.springinternalutils.backrelations.sample.service;
+package com.masvis.springdatarest.backrelation;
 
-import com.masvis.springinternalutils.backrelations.sample.domain.City;
-import com.masvis.springinternalutils.backrelations.sample.domain.Company;
-import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import com.masvis.springdatarest.backrelation.annotations.EnableHandledBackrelations;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.List;
+@SpringBootApplication
+@EnableHandledBackrelations
+@EnableAutoConfiguration
+public class BackrelationsTestApplication {
 
-@RepositoryRestResource
-public interface CityRepository extends PagingAndSortingRepository<City, Long> {
-    List<City> findByName(String name);
+    public static void main(String[] args) {
+        SpringApplication.run(BackrelationsTestApplication.class, args);
+    }
 
-    List<City> findByCompaniesContaining(Company company);
 }

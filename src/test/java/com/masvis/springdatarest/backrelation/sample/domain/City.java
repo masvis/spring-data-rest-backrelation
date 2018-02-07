@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package com.masvis.springinternalutils.backrelations.sample.domain;
+package com.masvis.springdatarest.backrelation.sample.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 @Entity
 public class City implements Serializable {
     @Id

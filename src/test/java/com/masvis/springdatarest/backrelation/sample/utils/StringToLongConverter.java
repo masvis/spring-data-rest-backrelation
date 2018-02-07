@@ -1,4 +1,4 @@
-package com.masvis.springinternalutils.backrelations.sample;
+package com.masvis.springdatarest.backrelation.sample.utils;
 
 import org.springframework.core.convert.converter.Converter;
 

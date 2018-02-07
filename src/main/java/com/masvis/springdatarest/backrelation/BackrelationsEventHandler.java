@@ -1,4 +1,4 @@
-package com.masvis.springinternalutils.backrelations;
+package com.masvis.springdatarest.backrelation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -19,20 +19,23 @@ public class BackrelationsEventHandler<T> {
     @Autowired
     public ApplicationContext applicationContext;
 
-    public BackrelationsEventHandler(Class<T> clazz, Field field, Class<BackrelationHandler<T>> backrelationHandlerClass) throws IllegalAccessException, InstantiationException {
+    public BackrelationsEventHandler(Class<T> clazz, Field field, Class<BackrelationHandler<T>> backrelationHandlerClass) {
         this.clazz = clazz;
         this.field = field;
         this.backrelationHandlerClass = backrelationHandlerClass;
     }
 
+    @SuppressWarnings("unused")
     @HandleBeforeLinkSave
     @HandleBeforeLinkDelete
-    public void managerUserAddBackRelation(Object backrelationObject, Object ignore) throws IllegalAccessException {
+    public void manageBackrelation(Object backrelationObj, Object ignore)
+            throws IllegalAccessException {
         BackrelationHandler<T> backrelationHandler = applicationContext.getBean(this.backrelationHandlerClass);
-        if (!clazz.isAssignableFrom(backrelationObject.getClass()))
+        if (!clazz.isAssignableFrom(backrelationObj.getClass()))
             return;
-        T obj = clazz.cast(backrelationObject);
+        T obj = clazz.cast(backrelationObj);
         field.setAccessible(true);
+        @SuppressWarnings("unchecked")
         Collection<? extends Serializable> finals = (Collection<? extends Serializable>) field.get(obj);
         Collection<? extends Serializable> deletables = backrelationHandler.findDeletablesByEntity(obj, finals);
 

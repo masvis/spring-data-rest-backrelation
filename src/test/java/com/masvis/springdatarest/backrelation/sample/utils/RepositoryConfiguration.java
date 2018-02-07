@@ -1,7 +1,7 @@
-package com.masvis.springinternalutils.backrelations.sample;
+package com.masvis.springdatarest.backrelation.sample.utils;
 
-import com.masvis.springinternalutils.backrelations.sample.domain.City;
-import com.masvis.springinternalutils.backrelations.sample.domain.Company;
+import com.masvis.springdatarest.backrelation.sample.domain.City;
+import com.masvis.springdatarest.backrelation.sample.domain.Company;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;

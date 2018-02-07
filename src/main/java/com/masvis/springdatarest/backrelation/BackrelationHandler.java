@@ -1,4 +1,4 @@
-package com.masvis.springinternalutils.backrelations;
+package com.masvis.springdatarest.backrelation;
 
 import java.io.Serializable;
 import java.util.Collection;

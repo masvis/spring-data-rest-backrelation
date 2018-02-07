@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.masvis.springinternalutils.backrelations.sample.domain;
+package com.masvis.springdatarest.backrelation.sample.domain;
 
-import com.masvis.springinternalutils.backrelations.annotations.HandledBackrelation;
-import com.masvis.springinternalutils.backrelations.sample.CompanyCityBackrelationHandler;
+import com.masvis.springdatarest.backrelation.annotations.HandledBackrelation;
+import com.masvis.springdatarest.backrelation.sample.CompanyCityBackrelationHandler;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,6 +27,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 @Entity
 public class Company implements Serializable {
     @Id

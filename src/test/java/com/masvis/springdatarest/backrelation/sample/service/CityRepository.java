@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2016 the original author or authors.
+ * Copyright 2012-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package com.masvis.springinternalutils.backrelations.sample.service;
+package com.masvis.springdatarest.backrelation.sample.service;
 
-import com.masvis.springinternalutils.backrelations.sample.domain.City;
-import com.masvis.springinternalutils.backrelations.sample.domain.Company;
+import com.masvis.springdatarest.backrelation.sample.domain.City;
+import com.masvis.springdatarest.backrelation.sample.domain.Company;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
 
 @RepositoryRestResource
-public interface CompanyRepository extends PagingAndSortingRepository<Company, Long> {
-    List<Company> findByCitiesContaining(City city);
+public interface CityRepository extends PagingAndSortingRepository<City, Long> {
+    List<City> findByName(String name);
+
+    List<City> findByCompaniesContaining(Company company);
 }

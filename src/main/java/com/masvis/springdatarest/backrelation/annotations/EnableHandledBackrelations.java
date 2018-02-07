@@ -1,6 +1,6 @@
-package com.masvis.springinternalutils.backrelations.annotations;
+package com.masvis.springdatarest.backrelation.annotations;
 
-import com.masvis.springinternalutils.backrelations.HandledBackrelationBeansRegistrar;
+import com.masvis.springdatarest.backrelation.utils.HandledBackrelationBeansRegistrar;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.AliasFor;
 

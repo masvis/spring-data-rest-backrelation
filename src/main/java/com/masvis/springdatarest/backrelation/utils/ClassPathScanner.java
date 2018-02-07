@@ -1,4 +1,4 @@
-package com.masvis.springinternalutils.backrelations;
+package com.masvis.springdatarest.backrelation.utils;
 
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;

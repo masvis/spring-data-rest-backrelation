@@ -1,7 +1,9 @@
-package com.masvis.springinternalutils.backrelations;
+package com.masvis.springdatarest.backrelation.utils;
 
-import com.masvis.springinternalutils.backrelations.annotations.EnableHandledBackrelations;
-import com.masvis.springinternalutils.backrelations.annotations.HandledBackrelation;
+import com.masvis.springdatarest.backrelation.BackrelationsEventHandler;
+import com.masvis.springdatarest.backrelation.annotations.HandledBackrelation;
+import com.masvis.springdatarest.backrelation.annotations.EnableHandledBackrelations;
+import com.masvis.springdatarest.backrelation.utils.ClassPathScanner;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;

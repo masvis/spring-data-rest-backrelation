@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.masvis.springinternalutils.backrelations.sample.service;
+package com.masvis.springdatarest.backrelation.sample.service;
 
-import com.masvis.springinternalutils.backrelations.sample.domain.City;
-import com.masvis.springinternalutils.backrelations.sample.domain.Company;
+import com.masvis.springdatarest.backrelation.sample.domain.City;
+import com.masvis.springdatarest.backrelation.sample.domain.Company;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;

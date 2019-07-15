@@ -17,8 +17,10 @@ package com.masvis.springdatarest.backrelation.sample;
 
 import com.masvis.springdatarest.backrelation.sample.domain.City;
 import com.masvis.springdatarest.backrelation.sample.domain.Company;
+import com.masvis.springdatarest.backrelation.sample.domain.Employee;
 import com.masvis.springdatarest.backrelation.sample.service.CityRepository;
 import com.masvis.springdatarest.backrelation.sample.service.CompanyRepository;
+import com.masvis.springdatarest.backrelation.sample.service.EmployeeRepository;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,6 +44,9 @@ public class CompanyRepositoryIntegrationTests {
     CityRepository cityRepository;
     @Autowired
     CompanyRepository companyRepository;
+    @Autowired
+    EmployeeRepository employeeRepository;
+
     @Autowired
     private TestRestTemplate restTemplate;
 
@@ -75,6 +80,13 @@ public class CompanyRepositoryIntegrationTests {
         Company university = new Company();
         university.setName("Università degli studi di Bari");
 
+        Employee employee = new Employee();
+        employee.setName("r1");
+
+        Employee employee1 = new Employee();
+        employee1.setName("r2");
+
+
         bari = this.restTemplate.postForObject("/cities", bari, City.class);
         conversano = this.restTemplate.postForObject("/cities", conversano, City.class);
         lecce = this.restTemplate.postForObject("/cities", lecce, City.class);
@@ -86,6 +98,11 @@ public class CompanyRepositoryIntegrationTests {
         politecnico = this.restTemplate.postForObject("/companies", politecnico, Company.class);
         masvis = this.restTemplate.postForObject("/companies", masvis, Company.class);
         university = this.restTemplate.postForObject("/companies", university, Company.class);
+
+
+        employee = this.restTemplate.postForObject("/employees", employee, Employee.class);
+        employee1 = this.restTemplate.postForObject("/employees", employee1, Employee.class);
+
 
         entity = new HttpEntity<>("/cities/" + bari.getId(), headers);
         body = this.restTemplate.exchange("/companies/" + politecnico.getId() + "/cities", HttpMethod.POST, entity, String.class);
@@ -118,9 +135,27 @@ public class CompanyRepositoryIntegrationTests {
         body = this.restTemplate.exchange("/companies/" + university.getId() + "/cities", HttpMethod.PUT, entity, String.class);
         assertThat(body.getStatusCode() == HttpStatus.CREATED);
 
+        entity = new HttpEntity<>("/employees/" + employee.getId(), headers);
+        body = this.restTemplate.exchange("/companies/" + university.getId() + "/employees", HttpMethod.POST, entity, String.class);
+        assertThat(body.getStatusCode() == HttpStatus.CREATED);
+        entity = new HttpEntity<>("/employees/" + employee1.getId(), headers);
+        body = this.restTemplate.exchange("/companies/" + university.getId() + "/employees", HttpMethod.POST, entity, String.class);
+        assertThat(body.getStatusCode() == HttpStatus.CREATED);
+
         entity = new HttpEntity<>(null, headers);
         body = this.restTemplate.exchange("/companies/" + masvis.getId() + "/cities/" + gioia.getId(), HttpMethod.DELETE, entity, String.class);
         assertThat(body.getStatusCode() == HttpStatus.ACCEPTED);
+    }
+
+    @Test
+    public void test2EmployeesCompaniesTest() {
+        List<Employee> employeeRepositoryByName = this.employeeRepository.findByName("r1");
+        assertThat(employeeRepositoryByName).hasSize(1);
+
+        Employee r1 = employeeRepositoryByName.get(0);
+
+        List<Company> companiesInR1 = this.companyRepository.findByEmployeesContaining(r1);
+        assertThat(companiesInR1).hasSize(1);
     }
 
     @Test

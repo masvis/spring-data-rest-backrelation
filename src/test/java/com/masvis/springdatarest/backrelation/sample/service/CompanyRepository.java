@@ -18,6 +18,7 @@ package com.masvis.springdatarest.backrelation.sample.service;
 
 import com.masvis.springdatarest.backrelation.sample.domain.City;
 import com.masvis.springdatarest.backrelation.sample.domain.Company;
+import com.masvis.springdatarest.backrelation.sample.domain.Employee;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
@@ -25,5 +26,8 @@ import java.util.List;
 
 @RepositoryRestResource
 public interface CompanyRepository extends PagingAndSortingRepository<Company, Long> {
+
     List<Company> findByCitiesContaining(City city);
+
+    List<Company> findByEmployeesContaining(Employee employee);
 }

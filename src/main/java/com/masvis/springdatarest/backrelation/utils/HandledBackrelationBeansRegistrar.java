@@ -103,7 +103,7 @@ public class HandledBackrelationBeansRegistrar implements ImportBeanDefinitionRe
                                 .setScope(BeanDefinition.SCOPE_SINGLETON)
                                 .getBeanDefinition();
 
-                        registry.registerBeanDefinition(clazz.getSimpleName() + "BackrelationsEventHandler", definition);
+                        registry.registerBeanDefinition(beanName, definition);
                     }
                 }
             }

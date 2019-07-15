@@ -1,6 +1,5 @@
 package com.masvis.springdatarest.backrelation;
 
-import java.io.Serializable;
 import java.util.Collection;
 
 /**
@@ -10,7 +9,7 @@ import java.util.Collection;
  * @author Ruggero Russo
  * @author Sante Stanisci
  */
-public interface BackrelationHandler<T> {
+public interface BackrelationHandler<T, V> {
     /**
      * Finds the subset of instances in a collection that are not available in the analyzed object.
      *
@@ -18,7 +17,7 @@ public interface BackrelationHandler<T> {
      * @param finals        the collection of instances used to match the analyzed entity field
      * @return a list of deletable relationships
      */
-    Collection<? extends Serializable> findDeletablesByEntity(T updatedEntity, Collection<? extends Serializable> finals);
+    Collection<? extends V> findDeletablesByEntity(T updatedEntity, Collection<? extends V> finals);
 
     /**
      * Get the instances available in a front relation field.
@@ -26,5 +25,5 @@ public interface BackrelationHandler<T> {
      * @param entity the target entity
      * @return a collection of instances of the back-related entity
      */
-    Collection<T> getFrontRelation(Serializable entity);
+    Collection<T> getFrontRelation(V entity);
 }

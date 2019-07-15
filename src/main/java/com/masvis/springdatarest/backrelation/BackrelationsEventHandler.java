@@ -6,10 +6,8 @@ import org.springframework.data.rest.core.annotation.HandleBeforeLinkDelete;
 import org.springframework.data.rest.core.annotation.HandleBeforeLinkSave;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
 
-import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Collection;
-import java.util.Map;
 
 /**
  * The main back-relation event handler class. It catches the {@link HandleBeforeLinkSave} and the
@@ -24,16 +22,16 @@ import java.util.Map;
  * @see HandleBeforeLinkDelete
  */
 @RepositoryEventHandler
-public class BackrelationsEventHandler<T> {
-
-    /**
-     * The name of bean
-     */
-    private final String beanName;
+public class BackrelationsEventHandler<T, V> {
     /**
      * The target entity type
      */
-    private final Class<T> clazz;
+    private final Class<T> targetClass;
+
+    /**
+     * The source entity type
+     */
+    private final Class<V> sourceClass;
     /**
      * The target entity back-relation field
      */
@@ -43,7 +41,7 @@ public class BackrelationsEventHandler<T> {
      *
      * @see BackrelationHandler
      */
-    private final Class<BackrelationHandler<T>> backrelationHandlerClass;
+    private final Class<BackrelationHandler<T, V>> backrelationHandlerClass;
 
     /**
      * The application context, used to get the instanced back-relation handler bean
@@ -52,19 +50,20 @@ public class BackrelationsEventHandler<T> {
      * @see Autowired
      */
     @Autowired
-    public ApplicationContext applicationContext;
+    private ApplicationContext applicationContext;
 
     /**
      * The event handler constructor.
      *
-     * @param beanName                 {@link BackrelationsEventHandler#beanName}
-     * @param clazz                    {@link BackrelationsEventHandler#clazz}
+     * @param targetClass              {@link BackrelationsEventHandler#targetClass}
+     * @param sourceClass              {@link BackrelationsEventHandler#sourceClass}
      * @param field                    {@link BackrelationsEventHandler#field}
      * @param backrelationHandlerClass {@link BackrelationsEventHandler#backrelationHandlerClass}
      */
-    public BackrelationsEventHandler(String beanName, Class<T> clazz, Field field, Class<BackrelationHandler<T>> backrelationHandlerClass) {
-        this.beanName = beanName;
-        this.clazz = clazz;
+    public BackrelationsEventHandler(Class<T> targetClass, Class<V> sourceClass, Field field,
+                                     Class<BackrelationHandler<T, V>> backrelationHandlerClass) {
+        this.targetClass = targetClass;
+        this.sourceClass = sourceClass;
         this.field = field;
         this.backrelationHandlerClass = backrelationHandlerClass;
     }
@@ -73,26 +72,30 @@ public class BackrelationsEventHandler<T> {
      * Launches the update of the front relation entity before saving the operation.
      *
      * @param backrelationObj the updated entity
-     * @param ignore          the updated field. It cannot be used to check the value of the field before the update, so
+     * @param persistentSet   the updated field. It cannot be used to check the value of the field before the update, so
      *                        it is ignored
      * @throws IllegalAccessException
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings("unchecked")
     @HandleBeforeLinkSave
     @HandleBeforeLinkDelete
-    public void manageBackrelation(Object backrelationObj, Object ignore)
+    public void manageBackrelation(Object backrelationObj, Collection persistentSet)
             throws IllegalAccessException {
-        BackrelationHandler<T> backrelationHandler = (BackrelationHandler<T>) applicationContext.getBean(beanName);
-
-        if (backrelationHandler == null || !clazz.isAssignableFrom(backrelationObj.getClass()))
+        BackrelationHandler<T, V> backrelationHandler = applicationContext.getBean(this.backrelationHandlerClass);
+        if (persistentSet.isEmpty() || !sourceClass.isAssignableFrom(getCollectionClass(persistentSet)) ||
+                !targetClass.isAssignableFrom(backrelationObj.getClass()))
             return;
-        T obj = clazz.cast(backrelationObj);
+        T obj = targetClass.cast(backrelationObj);
         field.setAccessible(true);
-        @SuppressWarnings("unchecked")
-        Collection<? extends Serializable> finals = (Collection<? extends Serializable>) field.get(obj);
-        Collection<? extends Serializable> deletables = backrelationHandler.findDeletablesByEntity(obj, finals);
+
+        Collection<? extends V> finals = (Collection<? extends V>) field.get(obj);
+        Collection<? extends V> deletables = backrelationHandler.findDeletablesByEntity(obj, finals);
 
         finals.forEach(f -> backrelationHandler.getFrontRelation(f).add(obj));
         deletables.forEach(d -> backrelationHandler.getFrontRelation(d).remove(obj));
+    }
+
+    private Class<?> getCollectionClass(Collection collection) {
+        return collection.stream().findAny().get().getClass();
     }
 }

@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.masvis.springdatarest.backrelation.sample.service;
+package com.masvis.springdatarest.backrelation.sample;
 
 import com.masvis.springdatarest.backrelation.sample.domain.City;
 import com.masvis.springdatarest.backrelation.sample.domain.Company;
+import com.masvis.springdatarest.backrelation.sample.service.CityRepository;
+import com.masvis.springdatarest.backrelation.sample.service.CompanyRepository;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -71,7 +73,7 @@ public class CompanyRepositoryIntegrationTests {
         Company masvis = new Company();
         masvis.setName("Masvis");
         Company university = new Company();
-        masvis.setName("Università degli studi di Bari");
+        university.setName("Università degli studi di Bari");
 
         bari = this.restTemplate.postForObject("/cities", bari, City.class);
         conversano = this.restTemplate.postForObject("/cities", conversano, City.class);

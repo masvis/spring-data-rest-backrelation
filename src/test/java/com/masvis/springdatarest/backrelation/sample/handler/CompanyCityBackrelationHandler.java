@@ -1,4 +1,4 @@
-package com.masvis.springdatarest.backrelation.sample;
+package com.masvis.springdatarest.backrelation.sample.handler;
 
 import com.masvis.springdatarest.backrelation.BackrelationHandler;
 import com.masvis.springdatarest.backrelation.sample.domain.City;

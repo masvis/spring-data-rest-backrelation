@@ -17,7 +17,8 @@
 package com.masvis.springdatarest.backrelation.sample.domain;
 
 import com.masvis.springdatarest.backrelation.annotations.HandledBackrelation;
-import com.masvis.springdatarest.backrelation.sample.CompanyCityBackrelationHandler;
+import com.masvis.springdatarest.backrelation.sample.handler.CompanyCityBackrelationHandler;
+import com.masvis.springdatarest.backrelation.sample.handler.CompanyEmployeeBackrelationHandler;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,8 +38,12 @@ public class Company implements Serializable {
     private String name;
 
     @ManyToMany(mappedBy = "companies")
-    @HandledBackrelation(CompanyCityBackrelationHandler.class)
+    @HandledBackrelation(value = CompanyCityBackrelationHandler.class, backrelationClass = City.class)
     private List<City> cities = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "companies")
+    @HandledBackrelation(value = CompanyEmployeeBackrelationHandler.class, backrelationClass = Employee.class)
+    private List<Employee> employees = new ArrayList<>();
 
     public Long getId() {
         return id;

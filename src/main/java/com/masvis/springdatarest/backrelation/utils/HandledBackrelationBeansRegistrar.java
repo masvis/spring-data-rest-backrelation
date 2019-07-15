@@ -95,13 +95,18 @@ public class HandledBackrelationBeansRegistrar implements ImportBeanDefinitionRe
                         BeanDefinition definition = BeanDefinitionBuilder
                                 .genericBeanDefinition(BackrelationsEventHandler.class)
                                 .addConstructorArgValue(clazz)
-                                .addConstructorArgValue(clazz)
+                                .addConstructorArgValue(handledBackrelation.backrelationClass())
                                 .addConstructorArgValue(field)
                                 .addConstructorArgValue(handledBackrelation.value())
                                 .setScope(BeanDefinition.SCOPE_SINGLETON)
                                 .getBeanDefinition();
+                        registry.registerBeanDefinition(
+                                clazz.getSimpleName() +
+                                        handledBackrelation.backrelationClass().getSimpleName()
+                                        + "BackrelationsEventHandler", definition
+                        );
 
-                        registry.registerBeanDefinition(clazz.getSimpleName() + "BackrelationsEventHandler", definition);
+
                     }
                 }
             }

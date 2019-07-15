@@ -28,4 +28,6 @@ public @interface HandledBackrelation {
      * @return the backrelationship handler.
      */
     Class<?> value();
+
+    Class<?> backrelationClass();
 }

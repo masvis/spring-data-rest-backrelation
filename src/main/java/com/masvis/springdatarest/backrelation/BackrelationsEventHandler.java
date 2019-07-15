@@ -28,20 +28,18 @@ public class BackrelationsEventHandler<T, V> {
      */
     private final Class<T> targetClass;
 
-    /**
-     * The source entity type
-     */
     private final Class<V> sourceClass;
+
     /**
      * The target entity back-relation field
      */
-    private final Field field;
+    private Field field;
     /**
      * The class type of the back-relation handler bean
      *
      * @see BackrelationHandler
      */
-    private final Class<BackrelationHandler<T, V>> backrelationHandlerClass;
+    private Class<BackrelationHandler<T, V>> backrelationHandlerClass;
 
     /**
      * The application context, used to get the instanced back-relation handler bean
@@ -60,7 +58,9 @@ public class BackrelationsEventHandler<T, V> {
      * @param field                    {@link BackrelationsEventHandler#field}
      * @param backrelationHandlerClass {@link BackrelationsEventHandler#backrelationHandlerClass}
      */
-    public BackrelationsEventHandler(Class<T> targetClass, Class<V> sourceClass, Field field,
+    public BackrelationsEventHandler(Class<T> targetClass,
+                                     Class<V> sourceClass,
+                                     Field field,
                                      Class<BackrelationHandler<T, V>> backrelationHandlerClass) {
         this.targetClass = targetClass;
         this.sourceClass = sourceClass;
@@ -79,11 +79,13 @@ public class BackrelationsEventHandler<T, V> {
     @SuppressWarnings("unchecked")
     @HandleBeforeLinkSave
     @HandleBeforeLinkDelete
-    public void manageBackrelation(Object backrelationObj, Collection persistentSet)
-            throws IllegalAccessException {
+    public void manageBackrelation(Object backrelationObj, Collection persistentSet) throws IllegalAccessException {
         BackrelationHandler<T, V> backrelationHandler = applicationContext.getBean(this.backrelationHandlerClass);
-        if ((!persistentSet.isEmpty() && !backrelationHandler.supports().isAssignableFrom(getCollectionClass(persistentSet))) ||
-                !targetClass.isAssignableFrom(backrelationObj.getClass()))
+
+        if ((!persistentSet.isEmpty() && !sourceClass.isAssignableFrom(getCollectionClass(persistentSet))) ||
+                !sourceClass.isAssignableFrom(backrelationHandler.supports()) ||
+                !targetClass.isAssignableFrom(backrelationObj.getClass())
+        )
             return;
 
         T obj = targetClass.cast(backrelationObj);

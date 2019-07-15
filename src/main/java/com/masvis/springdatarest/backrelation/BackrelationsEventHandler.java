@@ -82,8 +82,7 @@ public class BackrelationsEventHandler<T> {
     @HandleBeforeLinkDelete
     public void manageBackrelation(Object backrelationObj, Object ignore)
             throws IllegalAccessException {
-        Map<String, BackrelationHandler<T>> beansOfType = applicationContext.getBeansOfType(this.backrelationHandlerClass);
-        BackrelationHandler<T> backrelationHandler = beansOfType.get(beanName);
+        BackrelationHandler<T> backrelationHandler = (BackrelationHandler<T>) applicationContext.getBean(beanName);
 
         if (backrelationHandler == null || !clazz.isAssignableFrom(backrelationObj.getClass()))
             return;

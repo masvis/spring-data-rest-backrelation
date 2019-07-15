@@ -9,6 +9,7 @@ import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * The main back-relation event handler class. It catches the {@link HandleBeforeLinkSave} and the
@@ -24,6 +25,11 @@ import java.util.Collection;
  */
 @RepositoryEventHandler
 public class BackrelationsEventHandler<T> {
+
+    /**
+     * The name of bean
+     */
+    private final String beanName;
     /**
      * The target entity type
      */
@@ -51,11 +57,13 @@ public class BackrelationsEventHandler<T> {
     /**
      * The event handler constructor.
      *
+     * @param beanName                 {@link BackrelationsEventHandler#beanName}
      * @param clazz                    {@link BackrelationsEventHandler#clazz}
      * @param field                    {@link BackrelationsEventHandler#field}
      * @param backrelationHandlerClass {@link BackrelationsEventHandler#backrelationHandlerClass}
      */
-    public BackrelationsEventHandler(Class<T> clazz, Field field, Class<BackrelationHandler<T>> backrelationHandlerClass) {
+    public BackrelationsEventHandler(String beanName, Class<T> clazz, Field field, Class<BackrelationHandler<T>> backrelationHandlerClass) {
+        this.beanName = beanName;
         this.clazz = clazz;
         this.field = field;
         this.backrelationHandlerClass = backrelationHandlerClass;
@@ -74,8 +82,10 @@ public class BackrelationsEventHandler<T> {
     @HandleBeforeLinkDelete
     public void manageBackrelation(Object backrelationObj, Object ignore)
             throws IllegalAccessException {
-        BackrelationHandler<T> backrelationHandler = applicationContext.getBean(this.backrelationHandlerClass);
-        if (!clazz.isAssignableFrom(backrelationObj.getClass()))
+        Map<String, BackrelationHandler<T>> beansOfType = applicationContext.getBeansOfType(this.backrelationHandlerClass);
+        BackrelationHandler<T> backrelationHandler = beansOfType.get(beanName);
+
+        if (backrelationHandler == null || !clazz.isAssignableFrom(backrelationObj.getClass()))
             return;
         T obj = clazz.cast(backrelationObj);
         field.setAccessible(true);

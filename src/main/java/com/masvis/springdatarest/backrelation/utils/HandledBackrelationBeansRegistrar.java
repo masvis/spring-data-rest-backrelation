@@ -14,6 +14,7 @@ import org.springframework.util.MultiValueMap;
 
 import javax.persistence.Entity;
 import java.lang.reflect.Field;
+import java.util.Objects;
 
 /**
  * This registrar scans the {@link EnableHandledBackrelations#value()} packages in order to find one or more
@@ -65,8 +66,9 @@ public class HandledBackrelationBeansRegistrar implements ImportBeanDefinitionRe
         MultiValueMap<String, Object> allAnnotationAttributes =
                 standardAnnotationMetadata.getAllAnnotationAttributes(EnableHandledBackrelations.class.getName());
 
-        String[] basePackages = (String[]) allAnnotationAttributes.getFirst("basePackages");
+        String[] basePackages = (String[]) Objects.requireNonNull(allAnnotationAttributes).getFirst("basePackages");
         String[] returnedBasePackages;
+        assert basePackages != null;
         if (basePackages.length == 0) {
             returnedBasePackages = new String[1];
             returnedBasePackages[0] = standardAnnotationMetadata.getIntrospectedClass().getPackage().getName();
@@ -90,8 +92,11 @@ public class HandledBackrelationBeansRegistrar implements ImportBeanDefinitionRe
                 for (Field field : clazz.getDeclaredFields()) {
                     if (field.isAnnotationPresent(HandledBackrelation.class)) {
                         HandledBackrelation handledBackrelation = field.getAnnotation(HandledBackrelation.class);
+                        String beanName = Character.toLowerCase(handledBackrelation.value().getSimpleName().charAt(0))
+                                + handledBackrelation.value().getSimpleName().substring(1);
                         BeanDefinition definition = BeanDefinitionBuilder
                                 .genericBeanDefinition(BackrelationsEventHandler.class)
+                                .addConstructorArgValue(beanName)
                                 .addConstructorArgValue(clazz)
                                 .addConstructorArgValue(field)
                                 .addConstructorArgValue(handledBackrelation.value())

@@ -6,12 +6,12 @@
 
     <groupId>com.masvis.springdatarest.backrelation</groupId>
     <artifactId>spring-data-rest-backrelation</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.10.RELEASE</version>
+        <version>2.1.6.RELEASE</version>
     </parent>
 
     <properties>
@@ -24,7 +24,7 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
-            <version>1.11.10.RELEASE</version>
+            <version>2.1.8.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
@@ -34,7 +34,7 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-rest-core</artifactId>
-            <version>2.6.10.RELEASE</version>
+            <version>3.1.8.RELEASE</version>
         </dependency>
 
         <dependency>

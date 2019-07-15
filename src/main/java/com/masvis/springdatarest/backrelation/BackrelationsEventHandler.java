@@ -82,7 +82,7 @@ public class BackrelationsEventHandler<T, V> {
     public void manageBackrelation(Object backrelationObj, Collection persistentSet)
             throws IllegalAccessException {
         BackrelationHandler<T, V> backrelationHandler = applicationContext.getBean(this.backrelationHandlerClass);
-        if (persistentSet.isEmpty() || !sourceClass.isAssignableFrom(getCollectionClass(persistentSet)) ||
+        if ((!persistentSet.isEmpty() && !backrelationHandler.supports().isAssignableFrom(getCollectionClass(persistentSet))) ||
                 !targetClass.isAssignableFrom(backrelationObj.getClass()))
             return;
         T obj = targetClass.cast(backrelationObj);

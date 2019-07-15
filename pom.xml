@@ -6,7 +6,7 @@
 
     <groupId>com.masvis.springdatarest.backrelation</groupId>
     <artifactId>spring-data-rest-backrelation</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

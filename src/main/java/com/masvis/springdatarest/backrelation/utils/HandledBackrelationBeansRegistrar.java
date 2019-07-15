@@ -92,18 +92,16 @@ public class HandledBackrelationBeansRegistrar implements ImportBeanDefinitionRe
                 for (Field field : clazz.getDeclaredFields()) {
                     if (field.isAnnotationPresent(HandledBackrelation.class)) {
                         HandledBackrelation handledBackrelation = field.getAnnotation(HandledBackrelation.class);
-                        String beanName = Character.toLowerCase(handledBackrelation.value().getSimpleName().charAt(0))
-                                + handledBackrelation.value().getSimpleName().substring(1);
                         BeanDefinition definition = BeanDefinitionBuilder
                                 .genericBeanDefinition(BackrelationsEventHandler.class)
-                                .addConstructorArgValue(beanName)
+                                .addConstructorArgValue(clazz)
                                 .addConstructorArgValue(clazz)
                                 .addConstructorArgValue(field)
                                 .addConstructorArgValue(handledBackrelation.value())
                                 .setScope(BeanDefinition.SCOPE_SINGLETON)
                                 .getBeanDefinition();
 
-                        registry.registerBeanDefinition(beanName, definition);
+                        registry.registerBeanDefinition(clazz.getSimpleName() + "BackrelationsEventHandler", definition);
                     }
                 }
             }

@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Component
-public class CompanyCityBackrelationHandler implements BackrelationHandler<Company> {
+public class CompanyCityBackrelationHandler implements BackrelationHandler<Company, City> {
     @Autowired
     private final CityRepository cityRepository;
 
@@ -21,17 +21,22 @@ public class CompanyCityBackrelationHandler implements BackrelationHandler<Compa
     }
 
     @Override
-    public Collection<? extends Serializable> findDeletablesByEntity(Company updatedEntity, Collection<? extends Serializable> finals) {
+    public Class<? extends City> supports() {
+        return City.class;
+    }
+
+    @Override
+    public Collection<? extends City> findDeletablesByEntity(Company updatedEntity, Collection<? extends City> finals) {
         Collection<City> olds = cityRepository.findByCompaniesContaining(updatedEntity);
         return olds.stream()
                 .filter(ors -> finals.stream()
-                        .map(f -> ((City) f).getId())
+                        .map(f -> f.getId())
                         .noneMatch(frsid -> ors.getId().equals(frsid)))
                 .collect(Collectors.toSet());
     }
 
     @Override
-    public Collection<Company> getFrontRelation(Serializable entity) {
-        return ((City) entity).getCompanies();
+    public Collection<Company> getFrontRelation(City entity) {
+        return entity.getCompanies();
     }
 }

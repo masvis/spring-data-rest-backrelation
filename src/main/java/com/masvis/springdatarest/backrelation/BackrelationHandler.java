@@ -10,6 +10,9 @@ import java.util.Collection;
  * @author Sante Stanisci
  */
 public interface BackrelationHandler<T, V> {
+
+    Class<? extends V> supports();
+
     /**
      * Finds the subset of instances in a collection that are not available in the analyzed object.
      *

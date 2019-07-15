@@ -85,6 +85,7 @@ public class BackrelationsEventHandler<T, V> {
         if ((!persistentSet.isEmpty() && !backrelationHandler.supports().isAssignableFrom(getCollectionClass(persistentSet))) ||
                 !targetClass.isAssignableFrom(backrelationObj.getClass()))
             return;
+
         T obj = targetClass.cast(backrelationObj);
         field.setAccessible(true);
 
